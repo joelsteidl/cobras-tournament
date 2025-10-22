@@ -26,7 +26,7 @@ export function useRealTimeSync(callback: (event: UpdateEvent) => void) {
           return;
         }
         const data = await response.json();
-        
+
         if (!data.lastUpdated) {
           console.warn('[SYNC POLL] No lastUpdated in response');
           return;
@@ -34,8 +34,8 @@ export function useRealTimeSync(callback: (event: UpdateEvent) => void) {
 
         // If we have a new timestamp, trigger the callback
         if (data.lastUpdated > lastSeenTimestamp.current) {
-          console.log('[SYNC POLL] Detected update:', { 
-            old: lastSeenTimestamp.current, 
+          console.log('[SYNC POLL] Detected update:', {
+            old: lastSeenTimestamp.current,
             new: data.lastUpdated,
             diff: data.lastUpdated - lastSeenTimestamp.current
           });

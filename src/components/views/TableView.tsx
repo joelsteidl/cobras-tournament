@@ -8,7 +8,7 @@ import { getTeamFlag } from '@/lib/flags';
 
 export function TableView() {
   const { standings, loading, refetch } = useStandings();
-  const { matches } = useMatches();
+  const { matches, refetch: refetchMatches } = useMatches();
   const [champion, setChampion] = useState<{ teamId: string; teamName: string } | null>(null);
 
   // Check for finals match completion
@@ -51,8 +51,9 @@ export function TableView() {
   // Real-time sync
   useRealTimeSync((event) => {
     if (event.type === 'matches_updated') {
-      // Silently refetch to avoid UI flash
+      // Silently refetch both standings and matches to avoid UI flash
       refetch(true);
+      refetchMatches(true);
     }
   });
 

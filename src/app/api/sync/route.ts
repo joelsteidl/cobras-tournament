@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     }
 
     console.log('[SYNC POST] Setting timestamp in Redis:', timestamp);
-    
+
     // Update the timestamp to signal changes
     await redis.set(LAST_UPDATE_KEY, timestamp);
     console.log('[SYNC POST] Timestamp set successfully');

@@ -58,11 +58,11 @@ export async function updateMatch(match: Match): Promise<void> {
     state.lastUpdated = Date.now();
 
     await redis.set(TOURNAMENT_KEY, state);
-    
+
     // Update the sync timestamp separately - this is what clients poll
     const LAST_UPDATE_KEY = 'cobras:last-update';
     await redis.set(LAST_UPDATE_KEY, state.lastUpdated);
-    
+
     console.log('[KV] Updated match and sync timestamp:', state.lastUpdated);
   } catch (error) {
     console.error('Error updating match in Redis:', error);
