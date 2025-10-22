@@ -49,8 +49,8 @@ export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
   };
 
   return (
-    <div className="border-2 border-slate-300 rounded-lg p-4 mb-3 bg-white shadow-md">
-      <div className="mb-3">
+    <div className="border-b border-slate-200 py-3 px-2 bg-white hover:bg-slate-50 transition-colors">
+      <div className="mb-2">
         <p className="text-xs font-semibold text-slate-700 uppercase mb-1">Field {match.field} • {match.time}</p>
       </div>
 

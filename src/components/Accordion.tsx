@@ -26,7 +26,7 @@ export function AccordionItem({ title, children, defaultOpen = false }: Accordio
       </button>
 
       {isOpen && (
-        <div className="border-t-2 border-slate-200 p-4 bg-slate-50">
+        <div className="border-t border-slate-200 bg-white">
           {children}
         </div>
       )}
