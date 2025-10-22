@@ -27,6 +27,7 @@ export function TableView() {
 
   // Get semi-finals and finals data
   const semiFinals = matches.filter(m => m.round === 'semifinals');
+  const finalsMatch = matches.find(m => m.round === 'finals');
 
   // Get semi-final winners
   const sf1Winner = semiFinals.length > 0 && semiFinals[0] && semiFinals[0]?.completed && semiFinals[0]?.goalsA !== undefined && semiFinals[0]?.goalsB !== undefined
@@ -34,6 +35,11 @@ export function TableView() {
     : null;
   const sf2Winner = semiFinals.length > 1 && semiFinals[1] && semiFinals[1]?.completed && semiFinals[1]?.goalsA !== undefined && semiFinals[1]?.goalsB !== undefined
     ? (semiFinals[1].goalsA > semiFinals[1].goalsB ? semiFinals[1].teamA : semiFinals[1].teamB)
+    : null;
+
+  // Get finals loser
+  const finalsLoser = finalsMatch && finalsMatch.completed && finalsMatch.goalsA !== undefined && finalsMatch.goalsB !== undefined
+    ? (finalsMatch.goalsA > finalsMatch.goalsB ? finalsMatch.teamB : finalsMatch.teamA)
     : null;
 
   // Helper to get team name from ID
@@ -140,7 +146,13 @@ export function TableView() {
               <p className="text-sm font-semibold text-slate-800 mb-3">Final (5:20 PM)</p>
               {sf1Winner && sf2Winner ? (
                 <div className="p-3 bg-gradient-to-r from-amber-100 to-amber-50 border-2 border-amber-400 rounded font-semibold text-slate-900 text-center">
-                  {getTeamFlag(sf1Winner)} {getTeamName(sf1Winner)} vs {getTeamFlag(sf2Winner)} {getTeamName(sf2Winner)}
+                  <span className={finalsLoser === sf1Winner ? 'line-through text-slate-500' : ''}>
+                    {getTeamFlag(sf1Winner)} {getTeamName(sf1Winner)}
+                  </span>
+                  <span className="mx-3">vs</span>
+                  <span className={finalsLoser === sf2Winner ? 'line-through text-slate-500' : ''}>
+                    {getTeamFlag(sf2Winner)} {getTeamName(sf2Winner)}
+                  </span>
                 </div>
               ) : (
                 <div className="p-3 bg-gradient-to-r from-amber-100 to-amber-50 border-2 border-amber-400 rounded font-semibold text-slate-900 text-center">
