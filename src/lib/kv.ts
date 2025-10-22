@@ -60,7 +60,11 @@ export async function updateMatch(match: Match): Promise<void> {
     await redis.set(TOURNAMENT_KEY, state);
 
     // Broadcast sync event to notify clients
-    const syncEventUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/sync`;
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const syncEventUrl = `${baseUrl}/api/sync`;
+
     try {
       await fetch(syncEventUrl, {
         method: 'POST',

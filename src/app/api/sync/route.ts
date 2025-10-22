@@ -13,6 +13,7 @@ export async function GET() {
   try {
     // Get the current server update timestamp
     const serverUpdate = await redis.get<number>(LAST_UPDATE_KEY) || 0;
+    console.log('[SYNC GET] Current timestamp in Redis:', serverUpdate);
 
     return NextResponse.json({ lastUpdated: serverUpdate });
   } catch (error) {
@@ -30,8 +31,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing type or timestamp' }, { status: 400 });
     }
 
+    console.log('[SYNC POST] Updating timestamp:', { type, timestamp });
+
     // Update the timestamp to signal changes
     await redis.set(LAST_UPDATE_KEY, timestamp);
+    console.log('[SYNC POST] Timestamp updated successfully');
 
     return NextResponse.json({ success: true });
   } catch (error) {
