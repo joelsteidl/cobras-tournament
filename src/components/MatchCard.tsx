@@ -2,7 +2,7 @@
 
 import { Match } from '@/types';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { getTeamFlag } from '@/lib/flags';
 
 interface MatchCardProps {
@@ -14,6 +14,17 @@ interface MatchCardProps {
 export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
   const [goalsA, setGoalsA] = useState(match.goalsA ?? 0);
   const [goalsB, setGoalsB] = useState(match.goalsB ?? 0);
+  const [scoreSet, setScoreSet] = useState(false);
+  const [, startTransition] = useTransition();
+
+  // Update local state when match prop changes (e.g., from real-time sync)
+  useEffect(() => {
+    startTransition(() => {
+      setGoalsA(match.goalsA ?? 0);
+      setGoalsB(match.goalsB ?? 0);
+      setScoreSet(false);
+    });
+  }, [match.goalsA, match.goalsB, match.id]);
 
   const handleUpdateScore = () => {
     onUpdateScore({
@@ -22,35 +33,46 @@ export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
       goalsB,
       completed: true,
     });
+    setScoreSet(false);
   };
 
-  const isModified = goalsA !== (match.goalsA ?? 0) || goalsB !== (match.goalsB ?? 0);
+  const isModified = scoreSet || goalsA !== (match.goalsA ?? 0) || goalsB !== (match.goalsB ?? 0);
+
+  const handleGoalsAChange = (newValue: number) => {
+    setGoalsA(newValue);
+    setScoreSet(true);
+  };
+
+  const handleGoalsBChange = (newValue: number) => {
+    setGoalsB(newValue);
+    setScoreSet(true);
+  };
 
   return (
-    <div className="border-2 border-gray-400 rounded-lg p-4 mb-3 bg-white shadow-md">
+    <div className="border-2 border-slate-300 rounded-lg p-4 mb-3 bg-white shadow-md">
       <div className="mb-3">
-        <p className="text-xs font-semibold text-gray-700 uppercase mb-1">Field {match.field} • {match.time}</p>
+        <p className="text-xs font-semibold text-slate-700 uppercase mb-1">Field {match.field} • {match.time}</p>
       </div>
 
       <div className="flex items-center justify-between gap-4">
         {/* Team A */}
         <div className="flex-1 text-center">
-          <p className="font-bold text-sm mb-2 text-gray-900">{getTeamFlag(match.teamA)} {teamNames[match.teamA]}</p>
+          <p className="font-bold text-sm mb-2 text-slate-900">{getTeamFlag(match.teamA)} {teamNames[match.teamA]}</p>
           <div className="flex items-center justify-center gap-2">
             <Button
               size="sm"
               variant="outline"
-              onClick={() => setGoalsA(Math.max(0, goalsA - 1))}
-              className="border-gray-400 text-gray-900 hover:bg-gray-100"
+              onClick={() => handleGoalsAChange(Math.max(0, goalsA - 1))}
+              className="border-slate-300 text-slate-900 hover:bg-slate-100"
             >
               −
             </Button>
-            <span className="text-3xl font-bold w-14 text-gray-900">{goalsA}</span>
+            <span className="text-3xl font-bold w-14 text-slate-900">{goalsA}</span>
             <Button
               size="sm"
               variant="outline"
-              onClick={() => setGoalsA(goalsA + 1)}
-              className="border-gray-400 text-gray-900 hover:bg-gray-100"
+              onClick={() => handleGoalsAChange(goalsA + 1)}
+              className="border-slate-300 text-slate-900 hover:bg-slate-100"
             >
               +
             </Button>
@@ -58,26 +80,26 @@ export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
         </div>
 
         {/* VS */}
-        <div className="text-gray-600 font-bold text-lg">vs</div>
+        <div className="text-slate-600 font-bold text-lg">vs</div>
 
         {/* Team B */}
         <div className="flex-1 text-center">
-          <p className="font-bold text-sm mb-2 text-gray-900">{getTeamFlag(match.teamB)} {teamNames[match.teamB]}</p>
+          <p className="font-bold text-sm mb-2 text-slate-900">{getTeamFlag(match.teamB)} {teamNames[match.teamB]}</p>
           <div className="flex items-center justify-center gap-2">
             <Button
               size="sm"
               variant="outline"
-              onClick={() => setGoalsB(Math.max(0, goalsB - 1))}
-              className="border-gray-400 text-gray-900 hover:bg-gray-100"
+              onClick={() => handleGoalsBChange(Math.max(0, goalsB - 1))}
+              className="border-slate-300 text-slate-900 hover:bg-slate-100"
             >
               −
             </Button>
-            <span className="text-3xl font-bold w-14 text-gray-900">{goalsB}</span>
+            <span className="text-3xl font-bold w-14 text-slate-900">{goalsB}</span>
             <Button
               size="sm"
               variant="outline"
-              onClick={() => setGoalsB(goalsB + 1)}
-              className="border-gray-400 text-gray-900 hover:bg-gray-100"
+              onClick={() => handleGoalsBChange(goalsB + 1)}
+              className="border-slate-300 text-slate-900 hover:bg-slate-100"
             >
               +
             </Button>
@@ -88,7 +110,7 @@ export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
       {isModified && (
         <button
           onClick={handleUpdateScore}
-          className="w-full mt-3 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md text-sm transition-colors"
+          className="w-full mt-3 py-2 px-4 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-md text-sm transition-colors"
         >
           Save Score
         </button>

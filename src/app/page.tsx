@@ -5,11 +5,12 @@ import { HomeView } from '@/components/views/HomeView';
 import { TeamsView } from '@/components/views/TeamsView';
 import { TableView } from '@/components/views/TableView';
 import { AdminView } from '@/components/views/AdminView';
+import { Play, Trophy, Users, Settings } from 'lucide-react';
 
-type View = 'home' | 'teams' | 'table' | 'admin';
+type View = 'matches' | 'standings' | 'teams' | 'admin';
 
 export default function Home() {
-  const [view, setView] = useState<View>('home');
+  const [view, setView] = useState<View>('matches');
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -26,48 +27,52 @@ export default function Home() {
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
         <div className="flex items-center justify-around max-w-lg mx-auto">
           <button
-            onClick={() => setView('home')}
-            className={`flex-1 py-3 px-4 text-center font-medium transition-colors border-b-2 text-sm ${
-              view === 'home'
+            onClick={() => setView('matches')}
+            className={`flex-1 py-3 px-4 flex flex-col items-center gap-1 transition-colors border-b-2 ${
+              view === 'matches'
                 ? 'border-blue-600 text-blue-600'
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
-            🏠 Home
+            <Play size={20} strokeWidth={2} />
+            <span className="text-xs">Matches</span>
+          </button>
+
+          <button
+            onClick={() => setView('standings')}
+            className={`flex-1 py-3 px-4 flex flex-col items-center gap-1 transition-colors border-b-2 ${
+              view === 'standings'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            <Trophy size={20} strokeWidth={2} />
+            <span className="text-xs">Standings</span>
           </button>
 
           <button
             onClick={() => setView('teams')}
-            className={`flex-1 py-3 px-4 text-center font-medium transition-colors border-b-2 text-sm ${
+            className={`flex-1 py-3 px-4 flex flex-col items-center gap-1 transition-colors border-b-2 ${
               view === 'teams'
                 ? 'border-blue-600 text-blue-600'
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
-            👥 Teams
-          </button>
-
-          <button
-            onClick={() => setView('table')}
-            className={`flex-1 py-3 px-4 text-center font-medium transition-colors border-b-2 text-sm ${
-              view === 'table'
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            📊 Table
+            <Users size={20} strokeWidth={2} />
+            <span className="text-xs">Teams</span>
           </button>
 
           {isAdmin && (
             <button
               onClick={() => setView('admin')}
-              className={`flex-1 py-3 px-4 text-center font-medium transition-colors border-b-2 text-sm ${
+              className={`flex-1 py-3 px-4 flex flex-col items-center gap-1 transition-colors border-b-2 ${
                 view === 'admin'
                   ? 'border-yellow-600 text-yellow-600'
                   : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
-              ⚙️ Admin
+              <Settings size={20} strokeWidth={2} />
+              <span className="text-xs">Admin</span>
             </button>
           )}
         </div>
@@ -75,9 +80,9 @@ export default function Home() {
 
       {/* Content */}
       <main className="flex-1 overflow-y-auto max-w-lg mx-auto w-full">
-        {view === 'home' && <HomeView />}
+        {view === 'matches' && <HomeView />}
+        {view === 'standings' && <TableView />}
         {view === 'teams' && <TeamsView />}
-        {view === 'table' && <TableView />}
         {view === 'admin' && isAdmin && <AdminView />}
       </main>
     </div>

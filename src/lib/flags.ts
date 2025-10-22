@@ -6,7 +6,6 @@ export const TEAM_FLAGS: { [key: string]: string } = {
   france: '🇫🇷',
   germany: '🇩🇪',
   portugal: '🇵🇹',
-  spain: '🇪🇸',
 };
 
 export function getTeamFlag(teamId: string): string {

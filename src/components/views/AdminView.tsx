@@ -15,7 +15,7 @@ export function AdminView() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [activeTab, setActiveTab] = useState<'teams' | 'matches'>('teams');
+  const [activeTab, setActiveTab] = useState<'teams' | 'matches' | 'playoffs'>('teams');
 
   // Load data on mount
   useEffect(() => {
@@ -152,8 +152,8 @@ export function AdminView() {
 
   return (
     <div className="p-4 pb-24">
-      <h1 className="text-3xl font-bold mb-2 text-gray-900">🔧 Admin Panel</h1>
-      <p className="text-sm text-gray-600 mb-6">Edit teams, players, or matches. Changes sync in real-time.</p>
+      <h1 className="text-3xl font-bold mb-2 text-slate-900">🔧 Admin Panel</h1>
+      <p className="text-sm text-slate-600 mb-6">Edit teams, players, or matches. Changes sync in real-time.</p>
 
       {/* Messages */}
       {error && (
@@ -168,13 +168,13 @@ export function AdminView() {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 border-b-2 border-gray-300">
+      <div className="flex gap-2 mb-6 border-b-2 border-slate-300">
         <button
           onClick={() => setActiveTab('teams')}
           className={`py-2 px-4 font-semibold text-sm transition-colors ${
             activeTab === 'teams'
-              ? 'border-b-2 border-blue-600 text-blue-600 -mb-[2px]'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'border-b-2 border-slate-800 text-slate-800 -mb-[2px]'
+              : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           👥 Teams & Players
@@ -183,11 +183,21 @@ export function AdminView() {
           onClick={() => setActiveTab('matches')}
           className={`py-2 px-4 font-semibold text-sm transition-colors ${
             activeTab === 'matches'
-              ? 'border-b-2 border-blue-600 text-blue-600 -mb-[2px]'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'border-b-2 border-slate-800 text-slate-800 -mb-[2px]'
+              : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          ⚽ Match Schedule
+          ⚽ Group Stage
+        </button>
+        <button
+          onClick={() => setActiveTab('playoffs')}
+          className={`py-2 px-4 font-semibold text-sm transition-colors ${
+            activeTab === 'playoffs'
+              ? 'border-b-2 border-slate-800 text-slate-800 -mb-[2px]'
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          🏆 Playoffs
         </button>
       </div>
 
@@ -196,28 +206,28 @@ export function AdminView() {
         <>
           <div className="space-y-4 mb-6">
             {teams.map(team => (
-              <div key={team.id} className="border-2 border-gray-400 rounded-lg p-4 bg-white shadow-md">
+              <div key={team.id} className="border-2 border-slate-300 rounded-lg p-4 bg-white shadow-md">
                 {/* Team Name */}
                 <div className="mb-4">
-                  <label className="text-xs font-semibold text-gray-900 uppercase block mb-1">Team Name</label>
+                  <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Team Name</label>
                   <input
                     type="text"
                     value={team.name}
                     onChange={(e) => updateTeamName(team.id, e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded font-semibold text-lg text-gray-900"
+                    className="w-full px-3 py-2 border-2 border-slate-300 rounded font-semibold text-lg text-slate-900"
                   />
                 </div>
 
                 {/* Players */}
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-gray-900 uppercase block">Players</label>
+                  <label className="text-xs font-semibold text-slate-900 uppercase block">Players</label>
                   {team.players.map((player, idx) => (
                     <input
                       key={idx}
                       type="text"
                       value={player.name}
                       onChange={(e) => updatePlayerName(team.id, idx, e.target.value)}
-                      className="w-full px-3 py-2 border-2 border-gray-300 rounded text-sm text-gray-900"
+                      className="w-full px-3 py-2 border-2 border-slate-300 rounded text-sm text-slate-900"
                       placeholder={`Player ${idx + 1}`}
                     />
                   ))}
@@ -229,7 +239,7 @@ export function AdminView() {
           <button
             onClick={saveTeams}
             disabled={saving || matchSaving}
-            className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold rounded-lg transition-colors"
+            className="w-full py-3 px-4 bg-slate-800 hover:bg-slate-900 disabled:bg-slate-400 text-white font-bold rounded-lg transition-colors"
           >
             {saving ? 'Saving...' : '💾 Save Teams & Players'}
           </button>
@@ -244,35 +254,35 @@ export function AdminView() {
               const roundMatches = matches.filter(m => m.round === round);
               const roundTitles: { [key: string]: string } = {
                 round1: 'Round 1 (4:40 PM)',
-                round2: 'Round 2 (5:05 PM)',
-                round3: 'Round 3 (5:20 PM)',
+                round2: 'Round 2 (4:45 PM)',
+                round3: 'Round 3 (4:50 PM)',
               };
 
               return (
                 <div key={round}>
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">{roundTitles[round]}</h3>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">{roundTitles[round]}</h3>
                   <div className="space-y-3">
                     {roundMatches.map(match => (
-                      <div key={match.id} className="border-2 border-gray-400 rounded-lg p-4 bg-white shadow-md">
+                      <div key={match.id} className="border-2 border-slate-300 rounded-lg p-4 bg-white shadow-md">
                         {/* Field & Time */}
                         <div className="grid grid-cols-2 gap-3 mb-3">
                           <div>
-                            <label className="text-xs font-semibold text-gray-900 uppercase block mb-1">Field</label>
+                            <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Field</label>
                             <input
                               type="number"
                               min="1"
                               value={match.field}
                               onChange={(e) => updateMatch(match.id, { field: parseInt(e.target.value) })}
-                              className="w-full px-3 py-2 border-2 border-gray-300 rounded text-gray-900 font-semibold"
+                              className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
                             />
                           </div>
                           <div>
-                            <label className="text-xs font-semibold text-gray-900 uppercase block mb-1">Time</label>
+                            <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Time</label>
                             <input
                               type="text"
                               value={match.time}
                               onChange={(e) => updateMatch(match.id, { time: e.target.value })}
-                              className="w-full px-3 py-2 border-2 border-gray-300 rounded text-gray-900 font-semibold"
+                              className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
                             />
                           </div>
                         </div>
@@ -280,11 +290,11 @@ export function AdminView() {
                         {/* Teams */}
                         <div className="grid grid-cols-3 gap-2 mb-3 items-end">
                           <div>
-                            <label className="text-xs font-semibold text-gray-900 uppercase block mb-1">Team A</label>
+                            <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Team A</label>
                             <select
                               value={match.teamA}
                               onChange={(e) => updateMatch(match.id, { teamA: e.target.value })}
-                              className="w-full px-3 py-2 border-2 border-gray-300 rounded text-gray-900 font-semibold"
+                              className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
                             >
                               {teams.map(team => (
                                 <option key={team.id} value={team.id}>
@@ -295,32 +305,32 @@ export function AdminView() {
                           </div>
 
                           <div className="text-center">
-                            <label className="text-xs font-semibold text-gray-900 uppercase block mb-1">Score</label>
+                            <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Score</label>
                             <div className="flex gap-2">
                               <input
                                 type="number"
                                 min="0"
                                 value={match.goalsA ?? 0}
                                 onChange={(e) => updateMatch(match.id, { goalsA: parseInt(e.target.value) })}
-                                className="w-12 px-2 py-2 border-2 border-gray-300 rounded text-gray-900 font-bold text-center"
+                                className="w-12 px-2 py-2 border-2 border-slate-300 rounded text-slate-900 font-bold text-center"
                               />
-                              <span className="font-bold text-gray-900">-</span>
+                              <span className="font-bold text-slate-900">-</span>
                               <input
                                 type="number"
                                 min="0"
                                 value={match.goalsB ?? 0}
                                 onChange={(e) => updateMatch(match.id, { goalsB: parseInt(e.target.value) })}
-                                className="w-12 px-2 py-2 border-2 border-gray-300 rounded text-gray-900 font-bold text-center"
+                                className="w-12 px-2 py-2 border-2 border-slate-300 rounded text-slate-900 font-bold text-center"
                               />
                             </div>
                           </div>
 
                           <div>
-                            <label className="text-xs font-semibold text-gray-900 uppercase block mb-1">Team B</label>
+                            <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Team B</label>
                             <select
                               value={match.teamB}
                               onChange={(e) => updateMatch(match.id, { teamB: e.target.value })}
-                              className="w-full px-3 py-2 border-2 border-gray-300 rounded text-gray-900 font-semibold"
+                              className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
                             >
                               {teams.map(team => (
                                 <option key={team.id} value={team.id}>
@@ -339,7 +349,7 @@ export function AdminView() {
                             onChange={(e) => updateMatch(match.id, { completed: e.target.checked })}
                             className="w-5 h-5 cursor-pointer"
                           />
-                          <label className="text-sm font-semibold text-gray-900">Completed</label>
+                          <label className="text-sm font-semibold text-slate-900">Completed</label>
                         </div>
 
                         {/* Save Button */}
@@ -356,6 +366,238 @@ export function AdminView() {
                 </div>
               );
             })}
+          </div>
+        </>
+      )}
+
+      {/* Playoffs Tab (Semi-Finals & Finals) */}
+      {activeTab === 'playoffs' && (
+        <>
+          <div className="space-y-4 mb-6">
+            {/* Semi-Finals Section */}
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 mb-3">Semi-Finals (5:05 PM)</h3>
+              <div className="space-y-3">
+                {matches
+                  .filter(m => m.round === 'semifinals')
+                  .map(match => (
+                    <div key={match.id} className="border-2 border-orange-400 rounded-lg p-4 bg-gradient-to-r from-orange-50 to-yellow-50 shadow-md">
+                      {/* Field & Time */}
+                      <div className="grid grid-cols-2 gap-3 mb-3">
+                        <div>
+                          <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Field</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={match.field}
+                            onChange={(e) => updateMatch(match.id, { field: parseInt(e.target.value) })}
+                            className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Time</label>
+                          <input
+                            type="text"
+                            value={match.time}
+                            onChange={(e) => updateMatch(match.id, { time: e.target.value })}
+                            className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Teams */}
+                      <div className="grid grid-cols-3 gap-2 mb-3 items-end">
+                        <div>
+                          <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Team A</label>
+                          <select
+                            value={match.teamA}
+                            onChange={(e) => updateMatch(match.id, { teamA: e.target.value })}
+                            className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
+                          >
+                            <option value="tbd">TBD</option>
+                            {teams.map(team => (
+                              <option key={team.id} value={team.id}>
+                                {getTeamFlag(team.id)} {team.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div className="text-center">
+                          <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Score</label>
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              min="0"
+                              value={match.goalsA ?? 0}
+                              onChange={(e) => updateMatch(match.id, { goalsA: parseInt(e.target.value) })}
+                              className="w-12 px-2 py-2 border-2 border-slate-300 rounded text-slate-900 font-bold text-center"
+                            />
+                            <span className="font-bold text-slate-900">-</span>
+                            <input
+                              type="number"
+                              min="0"
+                              value={match.goalsB ?? 0}
+                              onChange={(e) => updateMatch(match.id, { goalsB: parseInt(e.target.value) })}
+                              className="w-12 px-2 py-2 border-2 border-slate-300 rounded text-slate-900 font-bold text-center"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Team B</label>
+                          <select
+                            value={match.teamB}
+                            onChange={(e) => updateMatch(match.id, { teamB: e.target.value })}
+                            className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
+                          >
+                            <option value="tbd">TBD</option>
+                            {teams.map(team => (
+                              <option key={team.id} value={team.id}>
+                                {getTeamFlag(team.id)} {team.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Completed Toggle */}
+                      <div className="flex items-center gap-3 mb-3">
+                        <input
+                          type="checkbox"
+                          checked={match.completed}
+                          onChange={(e) => updateMatch(match.id, { completed: e.target.checked })}
+                          className="w-5 h-5 cursor-pointer"
+                        />
+                        <label className="text-sm font-semibold text-slate-900">Completed</label>
+                      </div>
+
+                      {/* Save Button */}
+                      <button
+                        onClick={() => saveMatch(match)}
+                        disabled={matchSaving}
+                        className="w-full py-2 px-3 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-400 text-white font-bold rounded transition-colors text-sm"
+                      >
+                        {matchSaving ? 'Saving...' : '💾 Save Semi-Final'}
+                      </button>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Finals Section */}
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 mb-3">Final (5:20 PM)</h3>
+              <div className="space-y-3">
+                {matches
+                  .filter(m => m.round === 'finals')
+                  .map(match => (
+                    <div key={match.id} className="border-2 border-purple-400 rounded-lg p-4 bg-gradient-to-r from-purple-50 to-yellow-50 shadow-md">
+                  {/* Field & Time */}
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                      <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Field</label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={match.field}
+                        onChange={(e) => updateMatch(match.id, { field: parseInt(e.target.value) })}
+                        className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Time</label>
+                      <input
+                        type="text"
+                        value={match.time}
+                        onChange={(e) => updateMatch(match.id, { time: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Teams */}
+                  <div className="grid grid-cols-3 gap-2 mb-3 items-end">
+                    <div>
+                      <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Team A</label>
+                      <select
+                        value={match.teamA}
+                        onChange={(e) => updateMatch(match.id, { teamA: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
+                      >
+                        {teams.map(team => (
+                          <option key={team.id} value={team.id}>
+                            {getTeamFlag(team.id)} {team.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="text-center">
+                      <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Score</label>
+                      <div className="flex gap-2">
+                        <input
+                          type="number"
+                          min="0"
+                          value={match.goalsA ?? 0}
+                          onChange={(e) => updateMatch(match.id, { goalsA: parseInt(e.target.value) })}
+                          className="w-12 px-2 py-2 border-2 border-slate-300 rounded text-slate-900 font-bold text-center"
+                        />
+                        <span className="font-bold text-slate-900">-</span>
+                        <input
+                          type="number"
+                          min="0"
+                          value={match.goalsB ?? 0}
+                          onChange={(e) => updateMatch(match.id, { goalsB: parseInt(e.target.value) })}
+                          className="w-12 px-2 py-2 border-2 border-slate-300 rounded text-slate-900 font-bold text-center"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-semibold text-slate-900 uppercase block mb-1">Team B</label>
+                      <select
+                        value={match.teamB}
+                        onChange={(e) => updateMatch(match.id, { teamB: e.target.value })}
+                        className="w-full px-3 py-2 border-2 border-slate-300 rounded text-slate-900 font-semibold"
+                      >
+                        {teams.map(team => (
+                          <option key={team.id} value={team.id}>
+                            {getTeamFlag(team.id)} {team.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Completed Toggle */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <input
+                      type="checkbox"
+                      checked={match.completed}
+                      onChange={(e) => updateMatch(match.id, { completed: e.target.checked })}
+                      className="w-5 h-5 cursor-pointer"
+                    />
+                    <label className="text-sm font-semibold text-slate-900">Completed</label>
+                  </div>
+
+                  {/* Save Button */}
+                  <button
+                    onClick={() => saveMatch(match)}
+                    disabled={matchSaving}
+                    className="w-full py-2 px-3 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white font-bold rounded transition-colors text-sm"
+                  >
+                    {matchSaving ? 'Saving...' : '💾 Save Final'}
+                  </button>
+                </div>
+              ))}
+              {matches.filter(m => m.round === 'finals').length === 0 && (
+                <div className="p-4 bg-slate-100 rounded-lg text-center text-gray-600">
+                  <p>No finals match yet. Finals will be populated after semi-finals.</p>
+                </div>
+              )}
+              </div>
+            </div>
           </div>
         </>
       )}
@@ -390,7 +632,7 @@ export function AdminView() {
       )}
 
       {/* Info */}
-      <div className="mt-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg text-sm text-gray-700">
+      <div className="mt-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg text-sm text-slate-700">
         <p className="font-semibold mb-2">ℹ️ How this works:</p>
         <ul className="space-y-1 text-xs">
           <li>• <strong>Teams Tab:</strong> Edit team names and player names</li>

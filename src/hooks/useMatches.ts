@@ -10,20 +10,28 @@ export function useMatches() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchMatches = useCallback(async () => {
+  const fetchMatches = useCallback(async (silent = false) => {
     try {
-      setLoading(true);
+      console.log('[useMatches] Fetching matches, silent:', silent);
+      if (!silent) {
+        setLoading(true);
+      }
       const response = await fetch('/api/matches');
       if (!response.ok) throw new Error('Failed to fetch matches');
       const data = await response.json();
+      console.log('[useMatches] Fetched', data.length, 'matches');
+      console.log('[useMatches] First match:', data[0]);
       setMatches(data);
+      console.log('[useMatches] State updated with new matches');
       localStorage.setItem(CACHE_KEY, JSON.stringify(data));
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       console.error('Error fetching matches:', err);
     } finally {
-      setLoading(false);
+      if (!silent) {
+        setLoading(false);
+      }
     }
   }, []);
 

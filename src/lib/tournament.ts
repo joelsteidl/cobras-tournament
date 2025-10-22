@@ -11,22 +11,32 @@ export async function loadTeams(): Promise<Team[]> {
 }
 
 /**
- * Generate a balanced 4-round tournament schedule where:
- * - 7 teams total (Argentina, Brazil, England, France, Germany, Portugal, Spain)
- * - Each team plays exactly 3 matches (10 min each)
- * - Each round has 3 matches (6 teams playing, 1 team resting)
- * - Each team rests exactly once across 4 rounds
- * - Schedule fits in 50 minutes (4:40 PM - 5:29 PM) with 15 min buffer for finals
- * - 3 minute changeovers between rounds
+ * Generate a tournament schedule with group stage, semi-finals, and finals.
  *
- * Round 1 (4:40-4:50 PM) - Spain rests
- * Round 2 (4:53-5:03 PM) - England rests
- * Round 3 (5:06-5:16 PM) - Portugal rests
- * Round 4 (5:19-5:29 PM) - Brazil rests
- * Finals (5:30-5:45 PM) - Top 4 teams
+ * Timeline:
+ * - Group Stage (3 rounds): 4:40 PM, 4:45 PM, 4:50 PM (3 matches per round, 10 min games)
+ * - 5 min break: 5:00-5:05 PM
+ * - Semi-Finals (2 matches on 2 fields): 5:05-5:15 PM (Top 4 teams)
+ *   - SF1 (Field 1): 1st seed vs 4th seed
+ *   - SF2 (Field 2): 2nd seed vs 3rd seed
+ * - 5 min break: 5:15-5:20 PM
+ * - Final (1 match): 5:20-5:30 PM (SF winners)
+ *
+ * Qualification for Semi-Finals:
+ * - Top 4 teams by points after group stage advance
+ * - 1st vs 4th, 2nd vs 3rd (bracket seeding by standings)
+ * - Winners advance to Final
+ *
+ * Group Stage Matchups (each team plays 3 different opponents):
+ * Argentina: vs Germany, France, England
+ * Brazil: vs Portugal, Germany, France
+ * England: vs France, Portugal, Argentina
+ * France: vs England, Argentina, Brazil
+ * Germany: vs Argentina, Brazil, Portugal
+ * Portugal: vs Brazil, England, Germany
  */
 export function generateSchedule(): Match[] {
-  // Round 1 (4:40-4:50 PM) - Spain rests
+  // Round 1 (4:40 PM)
   const round1: Match[] = [
     {
       id: 'r1-f1',
@@ -34,7 +44,7 @@ export function generateSchedule(): Match[] {
       field: 1,
       time: '4:40 PM',
       teamA: 'argentina',
-      teamB: 'brazil',
+      teamB: 'germany',
       completed: false,
     },
     {
@@ -42,8 +52,8 @@ export function generateSchedule(): Match[] {
       round: 'round1',
       field: 2,
       time: '4:40 PM',
-      teamA: 'england',
-      teamB: 'france',
+      teamA: 'brazil',
+      teamB: 'portugal',
       completed: false,
     },
     {
@@ -51,19 +61,19 @@ export function generateSchedule(): Match[] {
       round: 'round1',
       field: 3,
       time: '4:40 PM',
-      teamA: 'germany',
-      teamB: 'portugal',
+      teamA: 'england',
+      teamB: 'france',
       completed: false,
     },
   ];
 
-  // Round 2 (4:53-5:03 PM) - England rests
+  // Round 2 (4:45 PM) - 5 min break
   const round2: Match[] = [
     {
       id: 'r2-f1',
       round: 'round2',
       field: 1,
-      time: '4:53 PM',
+      time: '4:45 PM',
       teamA: 'argentina',
       teamB: 'france',
       completed: false,
@@ -72,38 +82,38 @@ export function generateSchedule(): Match[] {
       id: 'r2-f2',
       round: 'round2',
       field: 2,
-      time: '4:53 PM',
+      time: '4:45 PM',
       teamA: 'brazil',
-      teamB: 'portugal',
+      teamB: 'germany',
       completed: false,
     },
     {
       id: 'r2-f3',
       round: 'round2',
       field: 3,
-      time: '4:53 PM',
-      teamA: 'germany',
-      teamB: 'spain',
+      time: '4:45 PM',
+      teamA: 'england',
+      teamB: 'portugal',
       completed: false,
     },
   ];
 
-  // Round 3 (5:06-5:16 PM) - Portugal rests
+  // Round 3 (4:50 PM) - 5 min break
   const round3: Match[] = [
     {
       id: 'r3-f1',
       round: 'round3',
       field: 1,
-      time: '5:06 PM',
+      time: '4:50 PM',
       teamA: 'argentina',
-      teamB: 'spain',
+      teamB: 'england',
       completed: false,
     },
     {
       id: 'r3-f2',
       round: 'round3',
       field: 2,
-      time: '5:06 PM',
+      time: '4:50 PM',
       teamA: 'brazil',
       teamB: 'france',
       completed: false,
@@ -112,43 +122,49 @@ export function generateSchedule(): Match[] {
       id: 'r3-f3',
       round: 'round3',
       field: 3,
-      time: '5:06 PM',
-      teamA: 'england',
-      teamB: 'germany',
-      completed: false,
-    },
-  ];
-
-  // Round 4 (5:19-5:29 PM) - Brazil rests
-  const round4: Match[] = [
-    {
-      id: 'r4-f1',
-      round: 'round4',
-      field: 1,
-      time: '5:19 PM',
-      teamA: 'argentina',
-      teamB: 'england',
-      completed: false,
-    },
-    {
-      id: 'r4-f2',
-      round: 'round4',
-      field: 2,
-      time: '5:19 PM',
-      teamA: 'france',
-      teamB: 'spain',
-      completed: false,
-    },
-    {
-      id: 'r4-f3',
-      round: 'round4',
-      field: 3,
-      time: '5:19 PM',
+      time: '4:50 PM',
       teamA: 'germany',
       teamB: 'portugal',
       completed: false,
     },
   ];
 
-  return [...round1, ...round2, ...round3, ...round4];
+  // Semi-Finals (5:05 PM) - Top 4 teams, 2 fields
+  // Bracket: 1st vs 4th (SF1), 2nd vs 3rd (SF2)
+  // Teams will be filled in dynamically based on group stage standings
+  const semiFinals: Match[] = [
+    {
+      id: 'sf-f1',
+      round: 'semifinals',
+      field: 1,
+      time: '5:05 PM',
+      teamA: 'tbd',
+      teamB: 'tbd',
+      completed: false,
+    },
+    {
+      id: 'sf-f2',
+      round: 'semifinals',
+      field: 2,
+      time: '5:05 PM',
+      teamA: 'tbd',
+      teamB: 'tbd',
+      completed: false,
+    },
+  ];
+
+  // Final (5:20 PM) - Winners of semi-finals
+  const final: Match[] = [
+    {
+      id: 'final-f1',
+      round: 'finals',
+      field: 1,
+      time: '5:20 PM',
+      teamA: 'tbd',
+      teamB: 'tbd',
+      completed: false,
+    },
+  ];
+
+  return [...round1, ...round2, ...round3, ...semiFinals, ...final];
 }

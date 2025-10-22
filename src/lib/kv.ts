@@ -1,5 +1,7 @@
 import { Redis } from '@upstash/redis';
 import { Match, TournamentState } from '@/types';
+import { autoPopulateSemiFinals, autoPopulateFinal, isGroupStageComplete, areSemiFinalsComplete, calculateStandings } from './standings';
+import { loadTeams } from './tournament';
 
 const TOURNAMENT_KEY = 'cobras:tournament:state';
 
@@ -38,9 +40,40 @@ export async function updateMatch(match: Match): Promise<void> {
       state.matches.push(match);
     }
 
+    // Auto-populate playoffs if conditions are met
+    if (isGroupStageComplete(state.matches)) {
+      // Load teams to calculate standings
+      const teams = await loadTeams();
+      const standings = calculateStandings(state.matches, teams);
+
+      // Auto-populate semi-finals
+      state.matches = autoPopulateSemiFinals(state.matches, standings);
+    }
+
+    // Auto-populate final if semi-finals are complete
+    if (areSemiFinalsComplete(state.matches)) {
+      state.matches = autoPopulateFinal(state.matches);
+    }
+
     state.lastUpdated = Date.now();
 
     await redis.set(TOURNAMENT_KEY, state);
+
+    // Broadcast sync event to notify clients
+    const syncEventUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/sync`;
+    try {
+      await fetch(syncEventUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'matches_updated',
+          timestamp: state.lastUpdated,
+        }),
+      });
+    } catch (syncError) {
+      console.error('Error broadcasting sync event:', syncError);
+      // Don't fail the update if sync event fails
+    }
   } catch (error) {
     console.error('Error updating match in Redis:', error);
     throw error;

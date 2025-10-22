@@ -3,12 +3,6 @@ import { Redis } from '@upstash/redis';
 
 const LAST_UPDATE_KEY = 'cobras:last-update';
 
-interface SyncState {
-  teamsVersion: number;
-  matchesVersion: number;
-  lastUpdated: number;
-}
-
 // Initialize Upstash Redis client
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
@@ -17,16 +11,31 @@ const redis = new Redis({
 
 export async function GET() {
   try {
-    // Get the current state version
-    const state = await redis.get<SyncState>(LAST_UPDATE_KEY) || {
-      teamsVersion: 0,
-      matchesVersion: 0,
-      lastUpdated: Date.now(),
-    };
+    // Get the current server update timestamp
+    const serverUpdate = await redis.get<number>(LAST_UPDATE_KEY) || 0;
 
-    return NextResponse.json(state);
+    return NextResponse.json({ lastUpdated: serverUpdate });
   } catch (error) {
     console.error('Error fetching sync state:', error);
-    return NextResponse.json({ error: 'Failed to fetch sync state' }, { status: 500 });
+    return NextResponse.json({ lastUpdated: Date.now() }, { status: 200 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { type, timestamp } = body as { type: string; timestamp: number };
+
+    if (!type || !timestamp) {
+      return NextResponse.json({ error: 'Missing type or timestamp' }, { status: 400 });
+    }
+
+    // Update the timestamp to signal changes
+    await redis.set(LAST_UPDATE_KEY, timestamp);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error posting sync event:', error);
+    return NextResponse.json({ error: 'Failed to post sync event' }, { status: 500 });
   }
 }

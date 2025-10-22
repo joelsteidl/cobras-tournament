@@ -77,6 +77,19 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000)
 
+### Testing
+
+The project includes a comprehensive test suite with 31 tests covering standings calculation, playoff logic, and schedule integrity.
+
+```bash
+npm run test:run      # Run all tests once
+npm run test          # Watch mode (re-run on changes)
+npm run test:ui       # Interactive UI dashboard
+```
+
+**Test Coverage:** 100% pass rate, all critical tournament logic validated
+**Documentation:** See [TESTING_INDEX.md](./TESTING_INDEX.md) for complete testing guide
+
 ### Environment Variables
 
 Create `.env.local`:

@@ -35,9 +35,3 @@ teams:
       - name: TBD
       - name: Owen
       - name: Henry
-  - id: spain
-    name: Spain
-    players:
-      - name: Noah
-      - name: TG
-      - name: Arlo

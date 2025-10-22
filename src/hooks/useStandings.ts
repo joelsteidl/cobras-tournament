@@ -9,9 +9,11 @@ export function useStandings() {
   const [standings, setStandings] = useState<Standings[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchStandings = useCallback(async () => {
+  const fetchStandings = useCallback(async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent) {
+        setLoading(true);
+      }
       const response = await fetch('/api/standings');
       if (!response.ok) throw new Error('Failed to fetch standings');
       const data = await response.json();
@@ -29,7 +31,9 @@ export function useStandings() {
         }
       }
     } finally {
-      setLoading(false);
+      if (!silent) {
+        setLoading(false);
+      }
     }
   }, []);
 
