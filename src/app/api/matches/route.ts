@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTournamentState, updateMatch } from '@/lib/kv';
 import { loadTeams, generateSchedule } from '@/lib/tournament';
+import { Redis } from '@upstash/redis';
 import { Match } from '@/types';
+
+// Initialize Upstash Redis client
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export async function GET() {
   try {
@@ -14,9 +21,8 @@ export async function GET() {
       state.matches = matches;
       state.lastUpdated = Date.now();
 
-      // Save to KV
-      const { kv } = await import('@vercel/kv');
-      await kv.set('cobras:tournament:state', state);
+      // Save to Upstash Redis
+      await redis.set('cobras:tournament:state', state);
     }
 
     return NextResponse.json(state.matches);

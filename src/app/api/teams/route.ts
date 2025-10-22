@@ -1,17 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { loadTeams } from '@/lib/tournament';
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import { Team } from '@/types';
 
 const TEAMS_CACHE_KEY = 'cobras:teams';
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'cobras2025';
 
+// Initialize Upstash Redis client
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
+
 export async function GET() {
   try {
-    // Check KV first for overrides
-    const teamsFromKV = await kv.get<Team[]>(TEAMS_CACHE_KEY);
-    if (teamsFromKV) {
-      return NextResponse.json(teamsFromKV);
+    // Check Upstash Redis first for overrides
+    const teamsFromRedis = await redis.get<Team[]>(TEAMS_CACHE_KEY);
+    if (teamsFromRedis) {
+      return NextResponse.json(teamsFromRedis);
     }
 
     // Fall back to YAML
@@ -31,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     const teams: Team[] = await request.json();
-    await kv.set(TEAMS_CACHE_KEY, teams);
+    await redis.set(TEAMS_CACHE_KEY, teams);
     return NextResponse.json(teams);
   } catch (error) {
     console.error('Error updating teams:', error);

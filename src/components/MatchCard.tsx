@@ -27,9 +27,9 @@ export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
   const isModified = goalsA !== (match.goalsA ?? 0) || goalsB !== (match.goalsB ?? 0);
 
   return (
-    <div className="border rounded-lg p-4 mb-3 bg-white shadow-sm">
+    <div className="border-2 border-gray-400 rounded-lg p-4 mb-3 bg-white shadow-md">
       <div className="mb-3">
-        <p className="text-xs text-gray-500 mb-1">Field {match.field} • {match.time}</p>
+        <p className="text-xs font-semibold text-gray-700 uppercase mb-1">Field {match.field} • {match.time}</p>
       </div>
 
       <div className="flex items-center justify-between gap-4">

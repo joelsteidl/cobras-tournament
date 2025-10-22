@@ -11,15 +11,17 @@ export async function loadTeams(): Promise<Team[]> {
 }
 
 /**
- * Generate the fixed match schedule for the tournament
- * Round 1: 4:40 PM - Each team plays once, 3 teams rest
- * Round 2: 5:05 PM - Each team plays once, 3 teams rest
- * Round 3: 5:20 PM - Each team plays once, 3 teams rest
- * Finals: 5:35 PM - Top 4 teams based on standings
+ * Generate a balanced round-robin schedule where:
+ * - 7 teams total (Argentina, Brazil, England, France, Germany, Portugal, Spain)
+ * - Each team plays exactly 3 matches
+ * - Each round has 3 matches (6 teams playing, 1 team resting)
+ * - No team plays against the same opponent twice
+ * Round 1: 4:40 PM
+ * Round 2: 5:05 PM
+ * Round 3: 5:20 PM
  */
 export function generateSchedule(): Match[] {
-  // Round 1 (4:40 PM)
-  // Argentina vs Brazil, England vs France, Germany vs Portugal, Spain rests
+  // Round 1 (4:40 PM) - Spain rests
   const round1: Match[] = [
     {
       id: 'r1-f1',
@@ -50,8 +52,7 @@ export function generateSchedule(): Match[] {
     },
   ];
 
-  // Round 2 (5:05 PM)
-  // Argentina vs England, Brazil vs Germany, France vs Portugal, Spain rests
+  // Round 2 (5:05 PM) - Portugal rests
   const round2: Match[] = [
     {
       id: 'r2-f1',
@@ -68,7 +69,7 @@ export function generateSchedule(): Match[] {
       field: 2,
       time: '5:05 PM',
       teamA: 'brazil',
-      teamB: 'germany',
+      teamB: 'france',
       completed: false,
     },
     {
@@ -76,14 +77,13 @@ export function generateSchedule(): Match[] {
       round: 'round2',
       field: 3,
       time: '5:05 PM',
-      teamA: 'france',
-      teamB: 'portugal',
+      teamA: 'germany',
+      teamB: 'spain',
       completed: false,
     },
   ];
 
-  // Round 3 (5:20 PM)
-  // Argentina vs France, Brazil vs Portugal, England vs Germany, Spain rests
+  // Round 3 (5:20 PM) - England rests
   const round3: Match[] = [
     {
       id: 'r3-f1',
@@ -108,7 +108,7 @@ export function generateSchedule(): Match[] {
       round: 'round3',
       field: 3,
       time: '5:20 PM',
-      teamA: 'england',
+      teamA: 'spain',
       teamB: 'germany',
       completed: false,
     },

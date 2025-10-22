@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 
 const LAST_UPDATE_KEY = 'cobras:last-update';
 
@@ -9,10 +9,16 @@ interface SyncState {
   lastUpdated: number;
 }
 
+// Initialize Upstash Redis client
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
+
 export async function GET() {
   try {
     // Get the current state version
-    const state = await kv.get<SyncState>(LAST_UPDATE_KEY) || {
+    const state = await redis.get<SyncState>(LAST_UPDATE_KEY) || {
       teamsVersion: 0,
       matchesVersion: 0,
       lastUpdated: Date.now(),
