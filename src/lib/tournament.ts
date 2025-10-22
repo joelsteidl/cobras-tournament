@@ -13,15 +13,19 @@ export async function loadTeams(): Promise<Team[]> {
 /**
  * Generate a balanced round-robin schedule where:
  * - 7 teams total (Argentina, Brazil, England, France, Germany, Portugal, Spain)
- * - Each team plays exactly 3 matches
+ * - Each team plays exactly 3 matches (10 min each)
  * - Each round has 3 matches (6 teams playing, 1 team resting)
- * - No team plays against the same opponent twice
- * Round 1: 4:40 PM
- * Round 2: 5:05 PM
- * Round 3: 5:20 PM
+ * - No team rests more than once
+ * - Schedule fits in 50 minutes (4:40 PM - 5:30 PM) with 15 min buffer for finals
+ * - ~15 min between round starts allows for changeovers
+ * 
+ * Round 1 (4:40-4:50 PM) - Spain rests
+ * Round 2 (4:55-5:05 PM) - Portugal rests
+ * Round 3 (5:10-5:20 PM) - England rests
+ * Finals (5:25-5:45 PM) - Top 4 teams
  */
 export function generateSchedule(): Match[] {
-  // Round 1 (4:40 PM) - Spain rests
+  // Round 1 (4:40-4:50 PM) - Spain rests
   const round1: Match[] = [
     {
       id: 'r1-f1',
@@ -52,13 +56,13 @@ export function generateSchedule(): Match[] {
     },
   ];
 
-  // Round 2 (5:05 PM) - Portugal rests
+  // Round 2 (4:55-5:05 PM) - Portugal rests
   const round2: Match[] = [
     {
       id: 'r2-f1',
       round: 'round2',
       field: 1,
-      time: '5:05 PM',
+      time: '4:55 PM',
       teamA: 'argentina',
       teamB: 'england',
       completed: false,
@@ -67,7 +71,7 @@ export function generateSchedule(): Match[] {
       id: 'r2-f2',
       round: 'round2',
       field: 2,
-      time: '5:05 PM',
+      time: '4:55 PM',
       teamA: 'brazil',
       teamB: 'france',
       completed: false,
@@ -76,20 +80,20 @@ export function generateSchedule(): Match[] {
       id: 'r2-f3',
       round: 'round2',
       field: 3,
-      time: '5:05 PM',
+      time: '4:55 PM',
       teamA: 'germany',
       teamB: 'spain',
       completed: false,
     },
   ];
 
-  // Round 3 (5:20 PM) - England rests
+  // Round 3 (5:10-5:20 PM) - England rests
   const round3: Match[] = [
     {
       id: 'r3-f1',
       round: 'round3',
       field: 1,
-      time: '5:20 PM',
+      time: '5:10 PM',
       teamA: 'argentina',
       teamB: 'france',
       completed: false,
@@ -98,7 +102,7 @@ export function generateSchedule(): Match[] {
       id: 'r3-f2',
       round: 'round3',
       field: 2,
-      time: '5:20 PM',
+      time: '5:10 PM',
       teamA: 'brazil',
       teamB: 'portugal',
       completed: false,
@@ -107,7 +111,7 @@ export function generateSchedule(): Match[] {
       id: 'r3-f3',
       round: 'round3',
       field: 3,
-      time: '5:20 PM',
+      time: '5:10 PM',
       teamA: 'spain',
       teamB: 'germany',
       completed: false,
