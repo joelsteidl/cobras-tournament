@@ -3,6 +3,7 @@
 import { Match } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { getTeamFlag } from '@/lib/flags';
 
 interface MatchCardProps {
   match: Match;
@@ -34,20 +35,22 @@ export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
       <div className="flex items-center justify-between gap-4">
         {/* Team A */}
         <div className="flex-1 text-center">
-          <p className="font-semibold text-sm mb-2">{teamNames[match.teamA]}</p>
+          <p className="font-bold text-sm mb-2 text-gray-900">{getTeamFlag(match.teamA)} {teamNames[match.teamA]}</p>
           <div className="flex items-center justify-center gap-2">
             <Button
               size="sm"
               variant="outline"
               onClick={() => setGoalsA(Math.max(0, goalsA - 1))}
+              className="border-gray-400 text-gray-900 hover:bg-gray-100"
             >
               −
             </Button>
-            <span className="text-2xl font-bold w-12">{goalsA}</span>
+            <span className="text-3xl font-bold w-14 text-gray-900">{goalsA}</span>
             <Button
               size="sm"
               variant="outline"
               onClick={() => setGoalsA(goalsA + 1)}
+              className="border-gray-400 text-gray-900 hover:bg-gray-100"
             >
               +
             </Button>
@@ -55,24 +58,26 @@ export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
         </div>
 
         {/* VS */}
-        <div className="text-gray-400 font-bold">vs</div>
+        <div className="text-gray-600 font-bold text-lg">vs</div>
 
         {/* Team B */}
         <div className="flex-1 text-center">
-          <p className="font-semibold text-sm mb-2">{teamNames[match.teamB]}</p>
+          <p className="font-bold text-sm mb-2 text-gray-900">{getTeamFlag(match.teamB)} {teamNames[match.teamB]}</p>
           <div className="flex items-center justify-center gap-2">
             <Button
               size="sm"
               variant="outline"
               onClick={() => setGoalsB(Math.max(0, goalsB - 1))}
+              className="border-gray-400 text-gray-900 hover:bg-gray-100"
             >
               −
             </Button>
-            <span className="text-2xl font-bold w-12">{goalsB}</span>
+            <span className="text-3xl font-bold w-14 text-gray-900">{goalsB}</span>
             <Button
               size="sm"
               variant="outline"
               onClick={() => setGoalsB(goalsB + 1)}
+              className="border-gray-400 text-gray-900 hover:bg-gray-100"
             >
               +
             </Button>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useStandings } from '@/hooks/useStandings';
 import { useRealTimeSync } from '@/hooks/useRealTimeSync';
+import { getTeamFlag } from '@/lib/flags';
 
 export function TableView() {
   const { standings, loading, refetch } = useStandings();
@@ -41,27 +42,27 @@ export function TableView() {
       </div>
 
       {/* Standings Table */}
-      <div className="mb-8 bg-white border rounded-lg overflow-hidden shadow-sm">
+      <div className="mb-8 bg-white border-2 border-gray-300 rounded-lg overflow-hidden shadow-md">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b">
+          <thead className="bg-blue-600 border-b-2 border-gray-300">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold text-sm">Rank</th>
-              <th className="px-4 py-3 text-left font-semibold text-sm">Team</th>
-              <th className="px-4 py-3 text-center font-semibold text-sm">P</th>
-              <th className="px-4 py-3 text-center font-semibold text-sm">Pts</th>
-              <th className="px-4 py-3 text-center font-semibold text-sm">GD</th>
-              <th className="px-4 py-3 text-center font-semibold text-sm">GF</th>
+              <th className="px-4 py-3 text-left font-bold text-sm text-white">Rank</th>
+              <th className="px-4 py-3 text-left font-bold text-sm text-white">Team</th>
+              <th className="px-4 py-3 text-center font-bold text-sm text-white">P</th>
+              <th className="px-4 py-3 text-center font-bold text-sm text-white">Pts</th>
+              <th className="px-4 py-3 text-center font-bold text-sm text-white">GD</th>
+              <th className="px-4 py-3 text-center font-bold text-sm text-white">GF</th>
             </tr>
           </thead>
           <tbody>
             {standings.map((team, idx) => (
-              <tr key={team.teamId} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                <td className="px-4 py-3 font-bold text-lg text-gray-700">{idx + 1}</td>
-                <td className="px-4 py-3 font-medium text-gray-900">{team.teamName}</td>
-                <td className="px-4 py-3 text-center text-gray-700">{team.played}</td>
-                <td className="px-4 py-3 text-center font-bold text-lg text-blue-600">{team.points}</td>
-                <td className="px-4 py-3 text-center text-gray-700">{team.goalDifference > 0 ? '+' : ''}{team.goalDifference}</td>
-                <td className="px-4 py-3 text-center text-gray-700">{team.goalsFor}</td>
+              <tr key={team.teamId} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-100 border-y border-gray-200'}>
+                <td className="px-4 py-3 font-bold text-lg text-gray-900">{idx + 1}</td>
+                <td className="px-4 py-3 font-bold text-gray-900">{getTeamFlag(team.teamId)} {team.teamName}</td>
+                <td className="px-4 py-3 text-center text-gray-900 font-semibold">{team.played}</td>
+                <td className="px-4 py-3 text-center font-bold text-lg text-blue-700">{team.points}</td>
+                <td className="px-4 py-3 text-center text-gray-900 font-semibold">{team.goalDifference > 0 ? '+' : ''}{team.goalDifference}</td>
+                <td className="px-4 py-3 text-center text-gray-900 font-semibold">{team.goalsFor}</td>
               </tr>
             ))}
           </tbody>
@@ -69,31 +70,31 @@ export function TableView() {
       </div>
 
       {/* Finals Matchups */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-        <h2 className="font-bold text-lg mb-4">🏆 Finals (5:35 PM)</h2>
+      <div className="bg-amber-100 border-2 border-amber-400 rounded-lg p-4">
+        <h2 className="font-bold text-lg mb-4 text-gray-900">🏆 Finals (5:35 PM)</h2>
 
         {top4.length >= 4 ? (
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-white border rounded">
-              <span className="font-semibold">{top4[0]?.teamName}</span>
-              <span className="text-gray-500">vs</span>
-              <span className="font-semibold">{top4[1]?.teamName}</span>
-              <span className="text-xs text-gray-500 ml-2">Field 1</span>
+            <div className="flex items-center justify-between p-3 bg-white border-2 border-gray-300 rounded font-semibold text-gray-900">
+              <span>{getTeamFlag(top4[0]?.teamId)} {top4[0]?.teamName}</span>
+              <span className="text-gray-600">vs</span>
+              <span>{getTeamFlag(top4[1]?.teamId)} {top4[1]?.teamName}</span>
+              <span className="text-xs text-gray-700 ml-2 font-normal">Field 1</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-white border rounded">
-              <span className="font-semibold">{top4[2]?.teamName}</span>
-              <span className="text-gray-500">vs</span>
-              <span className="font-semibold">{top4[3]?.teamName}</span>
-              <span className="text-xs text-gray-500 ml-2">Field 2</span>
+            <div className="flex items-center justify-between p-3 bg-white border-2 border-gray-300 rounded font-semibold text-gray-900">
+              <span>{getTeamFlag(top4[2]?.teamId)} {top4[2]?.teamName}</span>
+              <span className="text-gray-600">vs</span>
+              <span>{getTeamFlag(top4[3]?.teamId)} {top4[3]?.teamName}</span>
+              <span className="text-xs text-gray-700 ml-2 font-normal">Field 2</span>
             </div>
           </div>
         ) : (
-          <p className="text-gray-600 text-sm">Complete matches to generate finals matchups</p>
+          <p className="text-gray-900 text-sm font-medium">Complete matches to generate finals matchups</p>
         )}
       </div>
 
       {/* Legend */}
-      <div className="mt-6 text-xs text-gray-600 space-y-1">
+      <div className="mt-6 text-sm text-gray-900 space-y-1 font-medium">
         <p>P = Played • Pts = Points (Win: 3, Draw: 1, Loss: 0)</p>
         <p>GD = Goal Difference • GF = Goals For</p>
       </div>

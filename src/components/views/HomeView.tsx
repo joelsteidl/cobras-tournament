@@ -9,22 +9,22 @@ export function HomeView() {
   const { matches, loading, updateMatch, refetch } = useMatches();
   const [teamNames, setTeamNames] = useState<{ [key: string]: string }>({});
 
-  const loadTeamNames = async () => {
-    try {
-      const response = await fetch('/api/teams');
-      const teams: Team[] = await response.json();
-      const names: { [key: string]: string } = {};
-      teams.forEach((t: Team) => {
-        names[t.id] = t.name;
-      });
-      setTeamNames(names);
-    } catch (error) {
-      console.error('Error loading team names:', error);
-    }
-  };
-
   // Load team names on mount
   useEffect(() => {
+    const loadTeamNames = async () => {
+      try {
+        const response = await fetch('/api/teams');
+        const teams: Team[] = await response.json();
+        const names: { [key: string]: string } = {};
+        teams.forEach((t: Team) => {
+          names[t.id] = t.name;
+        });
+        setTeamNames(names);
+      } catch (error) {
+        console.error('Error loading team names:', error);
+      }
+    };
+
     loadTeamNames();
   }, []);
 
@@ -33,6 +33,19 @@ export function HomeView() {
     if (event.type === 'matches_updated') {
       refetch();
     } else if (event.type === 'teams_updated') {
+      const loadTeamNames = async () => {
+        try {
+          const response = await fetch('/api/teams');
+          const teams: Team[] = await response.json();
+          const names: { [key: string]: string } = {};
+          teams.forEach((t: Team) => {
+            names[t.id] = t.name;
+          });
+          setTeamNames(names);
+        } catch (error) {
+          console.error('Error loading team names:', error);
+        }
+      };
       loadTeamNames();
     }
   });
