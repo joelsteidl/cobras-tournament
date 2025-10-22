@@ -19,9 +19,16 @@ Start with one of these:
 ### 📖 For Detailed Deployment
 **→ [DEPLOYMENT.md](DEPLOYMENT.md)**
 - Step-by-step Vercel setup
-- KV database configuration
+- Upstash Redis database configuration
 - Verification tests
 - Troubleshooting guide
+
+### 🔄 For Upstash Redis Migration
+**→ [UPSTASH_MIGRATION.md](UPSTASH_MIGRATION.md)**
+- What changed (from Vercel KV)
+- Setup instructions
+- Free tier details
+- Testing guide
 
 ### 🎯 For Full Feature Overview
 **→ [LAUNCH_SUMMARY.md](LAUNCH_SUMMARY.md)**
@@ -61,7 +68,7 @@ Start with one of these:
 
 1. **Have GitHub account?** Go to: https://github.com/joelsteidl/cobras-tournament
 2. **Have Vercel account?** Go to: https://vercel.com/dashboard
-3. **Deploy**: Import repo → Create KV database → Add `ADMIN_TOKEN` env var → Done!
+3. **Deploy**: Import repo → Add Upstash credentials to env vars → Add `ADMIN_TOKEN` env var → Done!
 4. **Share**: Send link to your score keepers
 5. **Play**: Start entering scores!
 
@@ -114,7 +121,7 @@ Start with one of these:
 ```
 Frontend:     Next.js 16 + React 19 + TypeScript
 Styling:      Tailwind CSS 4.1.15 (mobile-first)
-Database:     Vercel KV (Redis)
+Database:     Upstash Redis (free tier)
 Sync:         1-second polling (no WebSocket)
 Auth:         URL token parameter
 Deployment:   Vercel (auto from GitHub)
@@ -151,14 +158,12 @@ All editable through Admin panel (no code changes needed).
   - Connect GitHub to Vercel
   
 - **Configuration**: 5 minutes
-  - Create KV database
+  - Create Upstash Redis database
   - Add environment variables
   
 - **Deployment**: 2 minutes
   - Click "Deploy"
-  - Wait for build
-
-- **Testing**: 5 minutes
+  - Wait for build- **Testing**: 5 minutes
   - Test on 2+ devices
   - Enter test scores
   - Verify real-time sync
@@ -176,8 +181,7 @@ All editable through Admin panel (no code changes needed).
 
 ### During Deployment
 - [ ] Follow [DEPLOYMENT.md](DEPLOYMENT.md)
-- [ ] Create Vercel project
-- [ ] Set up KV database
+- [ ] Set up Upstash Redis database
 - [ ] Add environment variables
 
 ### After Deployment
@@ -218,7 +222,7 @@ A: No. Requires internet. But works on any device (phone, tablet, laptop)
 A: 100+ easily. Built to scale.
 
 **Q: Where is the data stored?**
-A: Vercel KV (Redis). Automatically encrypted and backed up.
+A: Upstash Redis. Automatically encrypted and backed up.
 
 **Q: Can I export the final standings?**
 A: You can screenshot or copy from the Table view
