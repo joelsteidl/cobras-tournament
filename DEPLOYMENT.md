@@ -47,17 +47,20 @@ vercel --prod
 6. Vercel will auto-detect Next.js + Node 20 from `.nvmrc`
 7. Click **"Deploy"**
 
-### 3. Configure Vercel Storage (KV Database)
+### 3. Configure Upstash Redis Database
 
-1. In Vercel dashboard, go to your **cobras-tournament** project
-2. Click **"Storage"** tab
-3. Click **"Create Database"** → **"KV"**
-4. Select region closest to you
-5. Name it: **`cobras-kv`** (or any name)
-6. Vercel will automatically add these env vars:
-   - `KV_URL`
-   - `KV_REST_API_URL`
-   - `KV_REST_API_TOKEN`
+1. Go to https://upstash.com (free account)
+2. Create a new Redis database
+3. Copy your credentials:
+   - `UPSTASH_REDIS_REST_URL`
+   - `UPSTASH_REDIS_REST_TOKEN`
+
+4. In Vercel project settings, go to **"Environment Variables"**
+5. Add these variables for Production:
+   - **Name**: `UPSTASH_REDIS_REST_URL`
+   - **Value**: Your URL from Upstash
+   - **Name**: `UPSTASH_REDIS_REST_TOKEN`
+   - **Value**: Your token from Upstash
 
 ### 4. Add Admin Token Environment Variable
 
@@ -67,7 +70,7 @@ vercel --prod
    - **Value**: `cobras2025`
    - **Environment**: Production
 
-3. Click **"Save"** and redeploy
+3. Click **"Save"** and proceed to redeploy
 
 ### 5. Redeploy with Environment Variables
 
@@ -141,7 +144,7 @@ Share this link with your 3-4 users - they don't need any setup!
 ```
 Framework: Next.js 16.0.0
 Node Version: 20 (from .nvmrc)
-Database: Vercel KV (Redis)
+Database: Upstash Redis (free tier)
 Auth: Admin token in URL query param
 Sync: 1-second polling
 ```
@@ -149,8 +152,9 @@ Sync: 1-second polling
 ## Troubleshooting
 
 ### App shows "Failed to load matches"
-- Check Vercel KV is configured in Storage tab
-- Verify `KV_URL` env var is set
+- Check Upstash Redis connection in environment variables
+- Verify `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` are set
+- Test connection at https://upstash.com (Dashboard → your database)
 - Restart deployment
 
 ### Admin panel not showing
@@ -167,6 +171,11 @@ Sync: 1-second polling
 - Verify `public/teams.yaml` was deployed
 - Check `/api/teams` returns JSON
 - Teams should have 7 entries with 3 players each
+
+### Redis connection error
+- Verify credentials are correct in Vercel env vars
+- Check Upstash dashboard for database status
+- Ensure database is in "Running" state
 
 ## Post-Deployment
 
@@ -185,11 +194,11 @@ https://cobras-tournament.vercel.app/?admin=cobras2025
 ### 3. Monitor Performance
 - Vercel dashboard shows analytics
 - Check deployment logs for errors
-- Monitor KV database usage in Storage tab
+- Monitor Redis database usage in Upstash dashboard
 
 ### 4. Backup Strategy
 - GitHub automatically backs up all code
-- Match data is in Vercel KV (managed backup)
+- Match data is in Upstash Redis (managed backup)
 - No additional action needed
 
 ## Next Steps

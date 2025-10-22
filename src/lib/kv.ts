@@ -1,16 +1,22 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import { Match, TournamentState } from '@/types';
 
 const TOURNAMENT_KEY = 'cobras:tournament:state';
 
+// Initialize Upstash Redis client
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
+
 export async function getTournamentState(): Promise<TournamentState> {
   try {
-    const state = await kv.get<TournamentState>(TOURNAMENT_KEY);
+    const state = await redis.get<TournamentState>(TOURNAMENT_KEY);
     if (state) {
       return state;
     }
   } catch (error) {
-    console.error('Error fetching tournament state from KV:', error);
+    console.error('Error fetching tournament state from Redis:', error);
   }
 
   // Return empty state if not found
@@ -34,18 +40,18 @@ export async function updateMatch(match: Match): Promise<void> {
 
     state.lastUpdated = Date.now();
 
-    await kv.set(TOURNAMENT_KEY, state);
+    await redis.set(TOURNAMENT_KEY, state);
   } catch (error) {
-    console.error('Error updating match in KV:', error);
+    console.error('Error updating match in Redis:', error);
     throw error;
   }
 }
 
 export async function resetMatches(): Promise<void> {
   try {
-    await kv.del(TOURNAMENT_KEY);
+    await redis.del(TOURNAMENT_KEY);
   } catch (error) {
-    console.error('Error resetting matches in KV:', error);
+    console.error('Error resetting matches in Redis:', error);
     throw error;
   }
 }

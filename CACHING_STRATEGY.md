@@ -99,7 +99,7 @@ localStorage updated with NEW data
 
 ```
 4:40 PM - Match starts
-  
+
 Device A (Scorer): "Argentina 2 - Brazil 1" → Save
   ↓
 POST /api/matches (fresh, no cache)
@@ -107,14 +107,14 @@ POST /api/matches (fresh, no cache)
 Vercel KV updated
   ↓
 4:41 PM - Other devices polling
-  
+
 Device B (Table viewer):
   - Polls /api/sync (no cache)
   - Gets: matches_updated event
   - Calls /api/standings (no cache)
   - Gets: FRESH standings with points updated
   - Sees: Argentina moved up in rankings ✅
-  
+
 Device C (Admin):
   - Also polling (no cache)
   - Gets: FRESH teams data

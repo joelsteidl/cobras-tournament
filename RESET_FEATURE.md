@@ -46,7 +46,7 @@ const resetAllMatches = async () => {
         'x-admin-token': 'cobras2025',
       },
     });
-    
+
     if (!response.ok) throw new Error('Failed to reset matches');
     setSuccess('✅ All matches reset! Changes synced to all devices.');
     setShowResetConfirm(false);
