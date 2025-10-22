@@ -54,7 +54,7 @@ export function TeamsView() {
 
       <div className="grid grid-cols-1 gap-4">
         {teams.map(team => (
-          <div key={team.id} className="border-2 border-slate-300 rounded-lg p-4 bg-white shadow-md">
+          <div key={team.id} className="border border-slate-300 rounded-lg p-4 bg-white">
             <h2 className="text-xl font-bold mb-3 text-slate-900">{getTeamFlag(team.id)} {team.name}</h2>
             <ul className="space-y-2">
               {team.players.map((player, idx) => (

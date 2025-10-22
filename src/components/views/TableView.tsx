@@ -75,9 +75,9 @@ export function TableView() {
       )}
 
       {/* Standings Table */}
-      <div className="mb-8 bg-white border-2 border-slate-300 rounded-lg overflow-hidden shadow-md">
+      <div className="mb-8 bg-white border border-slate-300 rounded-lg overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-slate-800 border-b-2 border-slate-300">
+          <thead className="bg-slate-800 border-b border-slate-300">
             <tr>
               <th className="px-2 py-3 text-left font-bold text-xs text-white">Rank</th>
               <th className="px-2 py-3 text-left font-bold text-xs text-white">Team</th>
@@ -111,7 +111,7 @@ export function TableView() {
       </div>
 
       {/* Finals Matchups / Semi-Finals Bracket */}
-      <div className="bg-amber-50 border-2 border-amber-300 rounded-lg p-4 mb-6">
+      <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 mb-6">
         <h2 className="font-bold text-lg mb-4 text-slate-900">🏆 Playoffs Structure</h2>
 
         {top4.length >= 4 ? (
@@ -120,7 +120,7 @@ export function TableView() {
               <p className="text-sm font-semibold text-slate-800 mb-3">Semi-Finals (5:05 PM - 2 Fields)</p>
               <div className="space-y-2">
                 {/* SF1 */}
-                <div className="flex items-center justify-between p-3 bg-white border-2 border-slate-300 rounded font-semibold text-slate-900">
+                <div className="flex items-center justify-between p-3 bg-white border border-slate-300 rounded font-semibold text-slate-900">
                   <span className={sf1Winner && semiFinals[0]?.teamA !== sf1Winner ? 'line-through text-slate-500' : ''}>
                     SF1: {getTeamFlag(semiFinals[0]?.teamA)} {getTeamName(semiFinals[0]?.teamA)}
                   </span>
@@ -130,7 +130,7 @@ export function TableView() {
                   </span>
                 </div>
                 {/* SF2 */}
-                <div className="flex items-center justify-between p-3 bg-white border-2 border-slate-300 rounded font-semibold text-slate-900">
+                <div className="flex items-center justify-between p-3 bg-white border border-slate-300 rounded font-semibold text-slate-900">
                   <span className={sf2Winner && semiFinals[1]?.teamA !== sf2Winner ? 'line-through text-slate-500' : ''}>
                     SF2: {getTeamFlag(semiFinals[1]?.teamA)} {getTeamName(semiFinals[1]?.teamA)}
                   </span>
@@ -142,10 +142,10 @@ export function TableView() {
               </div>
             </div>
 
-            <div className="border-t-2 border-slate-300 pt-4">
+            <div className="border-t border-slate-300 pt-4">
               <p className="text-sm font-semibold text-slate-800 mb-3">Final (5:20 PM)</p>
               {sf1Winner && sf2Winner ? (
-                <div className="p-3 bg-gradient-to-r from-amber-100 to-amber-50 border-2 border-amber-400 rounded font-semibold text-slate-900 text-center">
+                <div className="p-3 bg-gradient-to-r from-amber-100 to-amber-50 border border-amber-400 rounded font-semibold text-slate-900 text-center">
                   <span className={finalsLoser === sf1Winner ? 'line-through text-slate-500' : ''}>
                     {getTeamFlag(sf1Winner)} {getTeamName(sf1Winner)}
                   </span>
@@ -155,7 +155,7 @@ export function TableView() {
                   </span>
                 </div>
               ) : (
-                <div className="p-3 bg-gradient-to-r from-amber-100 to-amber-50 border-2 border-amber-400 rounded font-semibold text-slate-900 text-center">
+                <div className="p-3 bg-gradient-to-r from-amber-100 to-amber-50 border border-amber-400 rounded font-semibold text-slate-900 text-center">
                   Winners of SF1 vs Winners of SF2
                 </div>
               )}
