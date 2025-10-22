@@ -95,12 +95,13 @@ export function HomeView() {
 
       <AccordionItem title="Round 1 (4:40 PM)" defaultOpen={true}>
         <div className="space-y-3">
-          {round1.map(match => (
+          {round1.map((match, idx) => (
             <MatchCard
               key={match.id}
               match={match}
               teamNames={teamNames}
               onUpdateScore={updateMatch}
+              index={idx}
             />
           ))}
         </div>
@@ -108,12 +109,13 @@ export function HomeView() {
 
       <AccordionItem title="Round 2 (4:45 PM)">
         <div className="space-y-3">
-          {round2.map(match => (
+          {round2.map((match, idx) => (
             <MatchCard
               key={match.id}
               match={match}
               teamNames={teamNames}
               onUpdateScore={updateMatch}
+              index={idx}
             />
           ))}
         </div>
@@ -121,12 +123,13 @@ export function HomeView() {
 
       <AccordionItem title="Round 3 (4:50 PM)">
         <div className="space-y-3">
-          {round3.map(match => (
+          {round3.map((match, idx) => (
             <MatchCard
               key={match.id}
               match={match}
               teamNames={teamNames}
               onUpdateScore={updateMatch}
+              index={idx}
             />
           ))}
         </div>
@@ -135,12 +138,13 @@ export function HomeView() {
       <AccordionItem title="Semi-Finals (5:05 PM)" defaultOpen={shouldOpenSemiFinals}>
         <div className="space-y-3">
           {semiFinals.length > 0 ? (
-            semiFinals.map(match => (
+            semiFinals.map((match, idx) => (
               <MatchCard
                 key={match.id}
                 match={match}
                 teamNames={teamNames}
                 onUpdateScore={updateMatch}
+                index={idx}
               />
             ))
           ) : (
@@ -152,12 +156,13 @@ export function HomeView() {
       <AccordionItem title="Final (5:20 PM)" defaultOpen={shouldOpenFinals}>
         <div className="space-y-3">
           {finals.length > 0 ? (
-            finals.map(match => (
+            finals.map((match, idx) => (
               <MatchCard
                 key={match.id}
                 match={match}
                 teamNames={teamNames}
                 onUpdateScore={updateMatch}
+                index={idx}
               />
             ))
           ) : (

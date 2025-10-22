@@ -13,7 +13,7 @@ export function AccordionItem({ title, children, defaultOpen = false }: Accordio
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-2 border-slate-300 rounded-lg mb-3 overflow-hidden bg-white">
+    <div className="border border-slate-300 rounded-lg mb-3 overflow-hidden bg-white">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 bg-slate-800 hover:bg-slate-900 transition-colors"

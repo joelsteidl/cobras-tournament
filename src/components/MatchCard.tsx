@@ -9,9 +9,10 @@ interface MatchCardProps {
   match: Match;
   teamNames: { [key: string]: string };
   onUpdateScore: (match: Match) => void;
+  index?: number;
 }
 
-export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
+export function MatchCard({ match, teamNames, onUpdateScore, index = 0 }: MatchCardProps) {
   const [goalsA, setGoalsA] = useState(match.goalsA ?? 0);
   const [goalsB, setGoalsB] = useState(match.goalsB ?? 0);
   const [scoreSet, setScoreSet] = useState(false);
@@ -49,8 +50,8 @@ export function MatchCard({ match, teamNames, onUpdateScore }: MatchCardProps) {
   };
 
   return (
-    <div className="border-b border-slate-200 py-3 px-2 bg-white hover:bg-slate-50 transition-colors">
-      <div className="mb-2">
+    <div className={`border-y border-slate-200 py-3 px-2 -my-px ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+      <div className="mb-2 text-center">
         <p className="text-xs font-semibold text-slate-700 uppercase mb-1">Field {match.field} • {match.time}</p>
       </div>
 
