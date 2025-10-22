@@ -1,0 +1,43 @@
+teams:
+  - id: argentina
+    name: Argentina
+    players:
+      - name: David D
+      - name: Joseph
+      - name: Xavi
+  - id: brazil
+    name: Brazil
+    players:
+      - name: Joel
+      - name: Santi
+      - name: Myron
+  - id: england
+    name: England
+    players:
+      - name: Jesse
+      - name: Patrick
+      - name: Sam
+  - id: france
+    name: France
+    players:
+      - name: Ben
+      - name: Leo
+      - name: Rafa
+  - id: germany
+    name: Germany
+    players:
+      - name: Luke
+      - name: Teddy
+      - name: Leif
+  - id: portugal
+    name: Portugal
+    players:
+      - name: TBD
+      - name: Owen
+      - name: Henry
+  - id: spain
+    name: Spain
+    players:
+      - name: Noah
+      - name: TG
+      - name: Arlo
