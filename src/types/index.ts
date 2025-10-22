@@ -10,7 +10,7 @@ export interface Team {
 
 export interface Match {
   id: string;
-  round: 'round1' | 'round2' | 'round3' | 'finals';
+  round: 'round1' | 'round2' | 'round3' | 'round4' | 'finals';
   field: number;
   time: string;
   teamA: string;

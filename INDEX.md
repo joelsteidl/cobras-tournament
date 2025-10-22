@@ -156,11 +156,11 @@ All editable through Admin panel (no code changes needed).
   - GitHub account (you have it)
   - Vercel account (free)
   - Connect GitHub to Vercel
-  
+
 - **Configuration**: 5 minutes
   - Create Upstash Redis database
   - Add environment variables
-  
+
 - **Deployment**: 2 minutes
   - Click "Deploy"
   - Wait for build- **Testing**: 5 minutes
