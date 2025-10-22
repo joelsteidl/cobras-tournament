@@ -13,15 +13,8 @@ interface RestingTeamsBadgeProps {
 
 function RestingTeamsBadge({ teams, teamNames }: RestingTeamsBadgeProps) {
   return (
-    <div className="bg-red-600 text-white rounded-lg p-3 mb-4 border-2 border-red-700">
-      <p className="text-xs font-bold uppercase mb-2">Resting:</p>
-      <div className="flex flex-wrap gap-2">
-        {teams.map(team => (
-          <span key={team} className="bg-red-700 px-3 py-1 rounded font-semibold text-sm">
-            {getTeamFlag(team)} {teamNames[team] || team}
-          </span>
-        ))}
-      </div>
+    <div className="bg-gray-100 text-gray-700 rounded-lg p-2 mb-4 border border-gray-300">
+      <p className="text-xs font-semibold mb-1 text-gray-600">Resting: {teams.map(team => `${getTeamFlag(team)} ${teamNames[team] || team}`).join(', ')}</p>
     </div>
   );
 }
