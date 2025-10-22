@@ -21,22 +21,33 @@ export function useRealTimeSync(callback: (event: UpdateEvent) => void) {
     const interval = setInterval(async () => {
       try {
         const response = await fetch('/api/sync');
-        if (!response.ok) return;
+        if (!response.ok) {
+          console.warn('[SYNC POLL] Non-OK response:', response.status);
+          return;
+        }
         const data = await response.json();
+        
+        if (!data.lastUpdated) {
+          console.warn('[SYNC POLL] No lastUpdated in response');
+          return;
+        }
 
         // If we have a new timestamp, trigger the callback
-        if (data.lastUpdated && data.lastUpdated > lastSeenTimestamp.current) {
-          console.log('[SYNC] Detected update:', { old: lastSeenTimestamp.current, new: data.lastUpdated });
+        if (data.lastUpdated > lastSeenTimestamp.current) {
+          console.log('[SYNC POLL] Detected update:', { 
+            old: lastSeenTimestamp.current, 
+            new: data.lastUpdated,
+            diff: data.lastUpdated - lastSeenTimestamp.current
+          });
           lastSeenTimestamp.current = data.lastUpdated;
-          // Assume any update is a matches_updated event (could be extended to track type)
-          console.log('[SYNC] Calling callback with matches_updated');
+          console.log('[SYNC POLL] Calling callback');
           callbackRef.current({
             type: 'matches_updated',
             timestamp: data.lastUpdated,
           });
         }
       } catch (error) {
-        console.error('Sync error:', error);
+        console.error('[SYNC POLL] Error:', error);
       }
     }, 1000); // Check every second
 

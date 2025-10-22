@@ -58,26 +58,12 @@ export async function updateMatch(match: Match): Promise<void> {
     state.lastUpdated = Date.now();
 
     await redis.set(TOURNAMENT_KEY, state);
-
-    // Broadcast sync event to notify clients
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : process.env.NEXTAUTH_URL || 'http://localhost:3000';
-    const syncEventUrl = `${baseUrl}/api/sync`;
-
-    try {
-      await fetch(syncEventUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'matches_updated',
-          timestamp: state.lastUpdated,
-        }),
-      });
-    } catch (syncError) {
-      console.error('Error broadcasting sync event:', syncError);
-      // Don't fail the update if sync event fails
-    }
+    
+    // Update the sync timestamp separately - this is what clients poll
+    const LAST_UPDATE_KEY = 'cobras:last-update';
+    await redis.set(LAST_UPDATE_KEY, state.lastUpdated);
+    
+    console.log('[KV] Updated match and sync timestamp:', state.lastUpdated);
   } catch (error) {
     console.error('Error updating match in Redis:', error);
     throw error;

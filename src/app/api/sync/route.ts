@@ -12,12 +12,13 @@ const redis = new Redis({
 export async function GET() {
   try {
     // Get the current server update timestamp
-    const serverUpdate = await redis.get<number>(LAST_UPDATE_KEY) || 0;
-    console.log('[SYNC GET] Current timestamp in Redis:', serverUpdate);
+    const serverUpdate = await redis.get<number>(LAST_UPDATE_KEY);
+    console.log('[SYNC GET] Retrieved timestamp from Redis:', serverUpdate);
 
-    return NextResponse.json({ lastUpdated: serverUpdate });
+    return NextResponse.json({ lastUpdated: serverUpdate || 0 });
   } catch (error) {
-    console.error('Error fetching sync state:', error);
+    console.error('[SYNC GET] Error fetching sync state:', error);
+    // Return current time as fallback
     return NextResponse.json({ lastUpdated: Date.now() }, { status: 200 });
   }
 }
@@ -25,21 +26,22 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { type, timestamp } = body as { type: string; timestamp: number };
+    const { timestamp } = body as { timestamp: number };
 
-    if (!type || !timestamp) {
-      return NextResponse.json({ error: 'Missing type or timestamp' }, { status: 400 });
+    if (!timestamp) {
+      console.warn('[SYNC POST] Missing timestamp in request');
+      return NextResponse.json({ error: 'Missing timestamp' }, { status: 400 });
     }
 
-    console.log('[SYNC POST] Updating timestamp:', { type, timestamp });
-
+    console.log('[SYNC POST] Setting timestamp in Redis:', timestamp);
+    
     // Update the timestamp to signal changes
     await redis.set(LAST_UPDATE_KEY, timestamp);
-    console.log('[SYNC POST] Timestamp updated successfully');
+    console.log('[SYNC POST] Timestamp set successfully');
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error posting sync event:', error);
+    console.error('[SYNC POST] Error posting sync event:', error);
     return NextResponse.json({ error: 'Failed to post sync event' }, { status: 500 });
   }
 }
