@@ -107,7 +107,7 @@ export function HomeView() {
         </div>
       </AccordionItem>
 
-      <AccordionItem title="Round 2 (4:45 PM)">
+      <AccordionItem title="Round 2 (4:55 PM)">
         <div className="space-y-3">
           {round2.map((match, idx) => (
             <MatchCard
@@ -121,7 +121,7 @@ export function HomeView() {
         </div>
       </AccordionItem>
 
-      <AccordionItem title="Round 3 (4:50 PM)">
+      <AccordionItem title="Round 3 (5:10 PM)">
         <div className="space-y-3">
           {round3.map((match, idx) => (
             <MatchCard
@@ -135,7 +135,7 @@ export function HomeView() {
         </div>
       </AccordionItem>
 
-      <AccordionItem title="Semi-Finals (5:05 PM)" defaultOpen={shouldOpenSemiFinals}>
+      <AccordionItem title="Semi-Finals (5:25 PM)" defaultOpen={shouldOpenSemiFinals}>
         <div className="space-y-3">
           {semiFinals.length > 0 ? (
             semiFinals.map((match, idx) => (
@@ -153,7 +153,7 @@ export function HomeView() {
         </div>
       </AccordionItem>
 
-      <AccordionItem title="Final (5:20 PM)" defaultOpen={shouldOpenFinals}>
+      <AccordionItem title="Final (5:40 PM)" defaultOpen={shouldOpenFinals}>
         <div className="space-y-3">
           {finals.length > 0 ? (
             finals.map((match, idx) => (
